@@ -114,7 +114,8 @@ class HubicBackend(duplicity.backend.Backend):
         data = 'refresh_token=%s&grant_type=refresh_token' % refresh_token
         r    = self.session.post(url, data=data)
         if(r.status_code == 200):
-            data = r.json()
+            import json
+            data = json.loads(r.content)
             return data['access_token']
         else:
             raise Exception('Got status_code %d in getAccessToken on url %s. Reason: %s' % (r.status_code, url, r.text))
@@ -127,7 +128,9 @@ class HubicBackend(duplicity.backend.Backend):
         url = 'https://api.hubic.com/1.0/account/credentials'
         r   = self.session.get(url)
         if(r.status_code == 200):
-            return r.json()
+            import json
+            data = json.loads(r.content)
+            return data
         else:
             raise Exception('Got status_code %d in getOpenStackCredentials on url %s. Reason: %s' % (r.status_code, url, r.text))
 
